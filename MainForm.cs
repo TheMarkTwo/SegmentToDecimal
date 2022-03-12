@@ -27,7 +27,7 @@ namespace SegmentToDecimal
                     {
                         BackColor = Color.DimGray,
                         Size = new Size(14, 15),
-                        Name = $"i{i}j{j}",
+                        Name = $"i{i:D2}j{j}",
                         Location = new Point(i * 18 + 15, 18 * j + 15)
                     };
                     c.CheckedChanged += CheckedChanged;
@@ -48,7 +48,26 @@ namespace SegmentToDecimal
 
         private void CheckedChanged(object sender, EventArgs e)
         {
-            richTextBox1.Text = ((CheckBox)sender).Name + "    " + ((CheckBox)sender).Location.X;
+            CheckBox c = ((CheckBox)sender);
+            int i = int.Parse(c.Name.Substring(1, 2));
+            int j = int.Parse(c.Name[4].ToString());
+
+            Label l = pnlGrid.Controls[$"row{j}"] as Label;
+            int rowValue = int.Parse(l.Text);
+
+            if (c.Checked == true)
+            {
+                rowValue += (int)Math.Pow(2, 14 - i);
+
+                richTextBox1.Text = $"cbox: {c.Name} \n i = {i} \n j = {j} \n\n lbl: {l.Name} \n {rowValue}";
+            }
+            else
+            {
+                rowValue -= (int)Math.Pow(2, 14 - i);
+                
+                richTextBox1.Text = "";
+            }
+            l.Text = rowValue.ToString();
         }
     }
 }
